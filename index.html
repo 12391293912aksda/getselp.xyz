@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SELP™ | Next-Gen Roblox Executor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="selp_ultimate.css">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <svg class="loader-logo" viewBox="0 0 200 60" width="200" height="60">
+                <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#00f0ff"/>
+                        <stop offset="50%" style="stop-color:#bf00ff"/>
+                        <stop offset="100%" style="stop-color:#00f0ff"/>
+                    </linearGradient>
+                </defs>
+                <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="url(#logoGrad)" font-family="Orbitron" font-size="40" font-weight="900">SELP</text>
+            </svg>
+            <div class="loader-bar">
+                <div class="loader-progress" id="loaderProgress"></div>
+            </div>
+            <div class="loader-text">INITIALIZING SYSTEM<span class="loader-dots"></span></div>
+        </div>
+        <div class="loader-grid"></div>
+    </div>
+
+    <!-- WebGL Background -->
+    <canvas id="webglCanvas"></canvas>
+    
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">
+                <svg viewBox="0 0 120 40" class="logo-svg">
+                    <defs>
+                        <linearGradient id="navLogoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#00f0ff"/>
+                            <stop offset="100%" style="stop-color:#bf00ff"/>
+                        </linearGradient>
+                    </defs>
+                    <text x="5" y="28" fill="url(#navLogoGrad)" font-family="Orbitron" font-size="24" font-weight="900">SELP</text>
+                    <text x="85" y="28" fill="#ffffff40" font-family="Rajdhani" font-size="12">™</text>
+                </svg>
+                <span class="nav-logo-status">
+                    <span class="status-dot"></span>
+                    ONLINE
+                </span>
+            </a>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link" data-text="Features">Features</a>
+                <a href="#showcase" class="nav-link" data-text="Showcase">Showcase</a>
+                <a href="#pricing" class="nav-link" data-text="Pricing">Pricing</a>
+                <a href="#community" class="nav-link" data-text="Community">Community</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="nav-discord magnetic">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+                </a>
+                <a href="#pricing" class="nav-cta magnetic">
+                    <span class="cta-bg"></span>
+                    <span class="cta-text">Download</span>
+                    <span class="cta-icon">↓</span>
+                </a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-grid"></div>
+            <div class="hero-orbs">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+                <div class="orb orb-3"></div>
+            </div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge" data-aos="fade-down">
+                <span class="badge-pulse"></span>
+                <span class="badge-icon">⚡</span>
+                <span class="badge-text">v4.0 RELEASE • HYPERION BYPASS ACTIVE</span>
+                <span class="badge-new">NEW</span>
+            </div>
+            <h1 class="hero-title" data-aos="fade-up">
+                <span class="title-line">
+                    <span class="char" style="--i:0">N</span><span class="char" style="--i:1">E</span><span class="char" style="--i:2">X</span><span class="char" style="--i:3">T</span><span class="char" style="--i:4">-</span><span class="char" style="--i:5">G</span><span class="char" style="--i:6">E</span><span class="char" style="--i:7">N</span>
+                </span>
+                <span class="title-line title-main">
+                    <span class="glitch-wrapper">
+                        <span class="glitch" data-text="EXECUTOR">EXECUTOR</span>
+                    </span>
+                </span>
+            </h1>
+            <p class="hero-desc" data-aos="fade-up" data-aos-delay="200">
+                The world's most advanced Roblox script executor. Featuring military-grade 
+                encryption, kernel-level bypass technology, and blazing-fast execution speeds.
+            </p>
+            <div class="hero-ctas" data-aos="fade-up" data-aos-delay="400">
+                <a href="#pricing" class="btn btn-primary magnetic">
+                    <span class="btn-bg"></span>
+                    <span class="btn-content">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>Download Now</span>
+                    </span>
+                    <span class="btn-shine"></span>
+                </a>
+                <a href="#showcase" class="btn btn-secondary magnetic">
+                    <span class="btn-content">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <span>Watch Demo</span>
+                    </span>
+                </a>
+            </div>
+            <div class="hero-stats" data-aos="fade-up" data-aos-delay="600">
+                <div class="stat">
+                    <span class="stat-value" data-count="287459">0</span>
+                    <span class="stat-label">Active Users</span>
+                    <div class="stat-bar"><div class="stat-fill" style="--width: 95%"></div></div>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">99.97<small>%</small></span>
+                    <span class="stat-label">Uptime</span>
+                    <div class="stat-bar"><div class="stat-fill" style="--width: 99%"></div></div>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">&lt;0.3<small>ms</small></span>
+                    <span class="stat-label">Injection Time</span>
+                    <div class="stat-bar"><div class="stat-fill" style="--width: 100%"></div></div>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Detections</span>
+                    <div class="stat-bar"><div class="stat-fill" style="--width: 100%"></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual" data-aos="fade-left" data-aos-delay="300">
+            <div class="executor-window">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <span class="control close"></span>
+                        <span class="control minimize"></span>
+                        <span class="control maximize"></span>
+                    </div>
+                    <div class="window-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        SELP v4.0.2 — Premium
+                    </div>
+                    <div class="window-status">
+                        <span class="status-indicator"></span>
+                        Connected
+                    </div>
+                </div>
+                <div class="window-tabs">
+                    <button class="tab active">Editor</button>
+                    <button class="tab">Script Hub</button>
+                    <button class="tab">Console</button>
+                    <button class="tab">Settings</button>
+                </div>
+                <div class="window-body">
+                    <div class="code-editor">
+                        <div class="line-numbers"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div>
+                        <div class="code-content" id="codeContent"></div>
+                    </div>
+                </div>
+                <div class="window-footer">
+                    <div class="footer-left">
+                        <span class="footer-status success">● Ready</span>
+                        <span class="footer-info">Lua 5.1</span>
+                    </div>
+                    <div class="footer-actions">
+                        <button class="action-btn clear">Clear</button>
+                        <button class="action-btn open">Open</button>
+                        <button class="action-btn save">Save</button>
+                        <button class="action-btn execute" id="executeBtn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            Execute
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-particles" id="heroParticles"></div>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll to explore</span>
+            <div class="scroll-indicator">
+                <div class="scroll-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <span>★ UNDETECTED</span><span>★ LEVEL 8 EXECUTION</span><span>★ HYPERION BYPASS</span><span>★ 500+ SCRIPTS</span><span>★ 24/7 SUPPORT</span><span>★ AUTO-UPDATE</span><span>★ MULTI-INSTANCE</span><span>★ SAVE INSTANCE</span>
+            <span>★ UNDETECTED</span><span>★ LEVEL 8 EXECUTION</span><span>★ HYPERION BYPASS</span><span>★ 500+ SCRIPTS</span><span>★ 24/7 SUPPORT</span><span>★ AUTO-UPDATE</span><span>★ MULTI-INSTANCE</span><span>★ SAVE INSTANCE</span>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-bg">
+            <div class="grid-pattern"></div>
+        </div>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-aos="fade-up">
+                    <span class="tag-dot"></span>
+                    CAPABILITIES
+                </span>
+                <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">
+                    Engineered for <span class="gradient-text">Dominance</span>
+                </h2>
+                <p class="section-desc" data-aos="fade-up" data-aos-delay="200">
+                    Every feature meticulously crafted by our team of security researchers and reverse engineers.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card feature-large" data-aos="fade-up">
+                    <div class="feature-glow"></div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    </div>
+                    <div class="feature-content">
+                        <span class="feature-tag">EXCLUSIVE</span>
+                        <h3>Hyperion Bypass</h3>
+                        <p>Our proprietary kernel-level bypass defeats Roblox's Hyperion anti-cheat with zero detection. Updated within hours of any patch.</p>
+                        <div class="feature-stats">
+                            <div class="mini-stat"><span>0</span> Detections</div>
+                            <div class="mini-stat"><span>&lt;2hr</span> Patch Time</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <h3>Blazing Fast</h3>
+                    <p>Sub-millisecond injection with optimized memory allocation.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </div>
+                    <h3>Multi-Instance</h3>
+                    <p>Run unlimited Roblox instances with independent execution.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </div>
+                    <h3>Script Hub</h3>
+                    <p>Access 500+ premium scripts for every popular game.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <h3>Full API</h3>
+                    <p>Complete Lua environment with custom functions.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    </div>
+                    <h3>Save Instance</h3>
+                    <p>Download any game's complete source for offline analysis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Showcase Section -->
+    <section class="showcase" id="showcase">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-aos="fade-up"><span class="tag-dot"></span>SHOWCASE</span>
+                <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">See it in <span class="gradient-text">Action</span></h2>
+                <p class="section-desc" data-aos="fade-up" data-aos-delay="200">Watch SELP dominate the most popular Roblox games.</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="showcase-card" data-aos="fade-up" data-game="blox-fruits">
+                    <div class="showcase-image"><div class="showcase-overlay"><span class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></span></div><img src="https://tr.rbxcdn.com/d0c9f0b9e7b9e7b9e7b9e7b9e7b9e7b9/480/270/Image/Png" alt="Blox Fruits" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 480 270%22><rect fill=%22%23151520%22 width=%22480%22 height=%22270%22/><text x=%22240%22 y=%22135%22 fill=%22%2300f0ff%22 text-anchor=%22middle%22 font-size=%2232%22>Blox Fruits</text></svg>'"></div>
+                    <div class="showcase-info"><h3>Blox Fruits</h3><p>Auto-farm, teleport, ESP, and more</p><span class="script-count">47 Scripts</span></div>
+                </div>
+                <div class="showcase-card" data-aos="fade-up" data-aos-delay="100" data-game="pet-sim">
+                    <div class="showcase-image"><div class="showcase-overlay"><span class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></span></div><img src="https://tr.rbxcdn.com/placeholder" alt="Pet Simulator" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 480 270%22><rect fill=%22%23151520%22 width=%22480%22 height=%22270%22/><text x=%22240%22 y=%22135%22 fill=%22%23bf00ff%22 text-anchor=%22middle%22 font-size=%2232%22>Pet Simulator</text></svg>'"></div>
+                    <div class="showcase-info"><h3>Pet Simulator X</h3><p>Dupe, auto-hatch, infinite coins</p><span class="script-count">38 Scripts</span></div>
+                </div>
+                <div class="showcase-card" data-aos="fade-up" data-aos-delay="200" data-game="da-hood">
+                    <div class="showcase-image"><div class="showcase-overlay"><span class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></span></div><img src="https://tr.rbxcdn.com/placeholder" alt="Da Hood" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 480 270%22><rect fill=%22%23151520%22 width=%22480%22 height=%22270%22/><text x=%22240%22 y=%22135%22 fill=%22%2300ff88%22 text-anchor=%22middle%22 font-size=%2232%22>Da Hood</text></svg>'"></div>
+                    <div class="showcase-info"><h3>Da Hood</h3><p>Aimbot, silent aim, triggerbot</p><span class="script-count">52 Scripts</span></div>
+                </div>
+                <div class="showcase-card" data-aos="fade-up" data-aos-delay="300" data-game="arsenal">
+                    <div class="showcase-image"><div class="showcase-overlay"><span class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></span></div><img src="https://tr.rbxcdn.com/placeholder" alt="Arsenal" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 480 270%22><rect fill=%22%23151520%22 width=%22480%22 height=%22270%22/><text x=%22240%22 y=%22135%22 fill=%22%23ff6b6b%22 text-anchor=%22middle%22 font-size=%2232%22>Arsenal</text></svg>'"></div>
+                    <div class="showcase-info"><h3>Arsenal</h3><p>Aimbot, ESP, no recoil, fly</p><span class="script-count">31 Scripts</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="pricing-bg"><div class="pricing-glow"></div></div>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-aos="fade-up"><span class="tag-dot"></span>PRICING</span>
+                <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Choose Your <span class="gradient-text">Power Level</span></h2>
+                <p class="section-desc" data-aos="fade-up" data-aos-delay="200">Flexible plans for every type of user. All plans include lifetime access.</p>
+            </div>
+            <div class="pricing-toggle" data-aos="fade-up" data-aos-delay="300">
+                <span class="toggle-label active">Monthly</span>
+                <label class="toggle-switch"><input type="checkbox" id="pricingToggle"><span class="toggle-slider"></span></label>
+                <span class="toggle-label">Lifetime <span class="save-badge">SAVE 70%</span></span>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="pricing-header">
+                        <span class="pricing-tier">Starter</span>
+                        <div class="pricing-price"><span class="currency">$</span><span class="amount" data-monthly="0" data-lifetime="0">0</span><span class="period">/forever</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Basic Script Execution</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>50 Free Scripts</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Community Support</li>
+                        <li class="excluded"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Hyperion Bypass</li>
+                        <li class="excluded"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Multi-Instance</li>
+                        <li class="excluded"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Priority Updates</li>
+                    </ul>
+                    <a href="#" class="pricing-btn">Get Started Free</a>
+                </div>
+                <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="200">
+                    <div class="featured-badge">MOST POPULAR</div>
+                    <div class="pricing-header">
+                        <span class="pricing-tier">Pro</span>
+                        <div class="pricing-price"><span class="currency">$</span><span class="amount" data-monthly="9.99" data-lifetime="29.99">9.99</span><span class="period" data-monthly="/month" data-lifetime="/lifetime">/month</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Full Script Execution</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>300+ Premium Scripts</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Hyperion Bypass</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Auto-Updates</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Priority Support</li>
+                        <li class="excluded"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Multi-Instance</li>
+                    </ul>
+                    <a href="#" class="pricing-btn primary">Get Pro Access</a>
+                </div>
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="pricing-header">
+                        <span class="pricing-tier">Ultimate</span>
+                        <div class="pricing-price"><span class="currency">$</span><span class="amount" data-monthly="19.99" data-lifetime="49.99">19.99</span><span class="period" data-monthly="/month" data-lifetime="/lifetime">/month</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Everything in Pro</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>500+ Scripts + Exclusive</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Unlimited Multi-Instance</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Save Instance</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Custom Script Requests</li>
+                        <li class="included"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Private Discord + Roles</li>
+                    </ul>
+                    <a href="#" class="pricing-btn">Go Ultimate</a>
+                </div>
+            </div>
+            <div class="pricing-guarantee" data-aos="fade-up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div><strong>30-Day Money-Back Guarantee</strong><p>Not satisfied? Get a full refund within 30 days. No questions asked.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community / Testimonials -->
+    <section class="community" id="community">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-aos="fade-up"><span class="tag-dot"></span>COMMUNITY</span>
+                <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Trusted by <span class="gradient-text">287,000+</span> Users</h2>
+                <p class="section-desc" data-aos="fade-up" data-aos-delay="200">Join the largest and most active executor community.</p>
+            </div>
+            <div class="testimonials-wrapper">
+                <div class="testimonials-track" id="testimonialsTrack">
+                    <div class="testimonial-card"><div class="testimonial-header"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" alt="User"><div><strong>xX_DarkMatter_Xx</strong><span>Ultimate User</span></div></div><div class="testimonial-stars">★★★★★</div><p>"Switched from Synapse X and never looking back. SELP is faster, more stable, and actually updates when Roblox patches. Best investment I've made."</p></div>
+                    <div class="testimonial-card"><div class="testimonial-header"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Emma" alt="User"><div><strong>BloxFruitGod</strong><span>Pro User</span></div></div><div class="testimonial-stars">★★★★★</div><p>"The script hub is insane. Found auto-farm scripts for every game I play. Made max level in Blox Fruits overnight while sleeping 😂"</p></div>
+                    <div class="testimonial-card"><div class="testimonial-header"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jake" alt="User"><div><strong>ScriptKiddie9000</strong><span>Ultimate User</span></div></div><div class="testimonial-stars">★★★★★</div><p>"Been using for 8 months straight, never got banned once. The Hyperion bypass is actually legit. Support team responds within minutes too."</p></div>
+                    <div class="testimonial-card"><div class="testimonial-header"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mia" alt="User"><div><strong>PetSimQueen</strong><span>Pro User</span></div></div><div class="testimonial-stars">★★★★★</div><p>"Customer support helped me set everything up in 5 minutes. The interface is so clean compared to other executors. Totally worth the money!"</p></div>
+                    <div class="testimonial-card"><div class="testimonial-header"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Liam" alt="User"><div><strong>HoodLegend</strong><span>Ultimate User</span></div></div><div class="testimonial-stars">★★★★★</div><p>"Da Hood aimbot is undetectable. Been dropping 50+ kills per game. My friends all bought it after seeing me play. No cap this is the best."</p></div>
+                </div>
+            </div>
+            <div class="community-cta" data-aos="fade-up">
+                <div class="discord-widget">
+                    <div class="discord-info"><svg width="40" height="40" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg><div><strong>Join Our Discord</strong><p><span class="online-count">12,847</span> members online</p></div></div>
+                    <a href="#" class="discord-btn magnetic">Join Server</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-aos="fade-up"><span class="tag-dot"></span>FAQ</span>
+                <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Frequently Asked <span class="gradient-text">Questions</span></h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item" data-aos="fade-up"><div class="faq-question"><span>Is SELP safe to use?</span><div class="faq-icon"><span></span><span></span></div></div><div class="faq-answer"><p>Yes, SELP uses kernel-level protection and advanced anti-detection. We've maintained a 0% detection rate since launch. Our team monitors Roblox updates 24/7 and pushes patches within hours.</p></div></div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="100"><div class="faq-question"><span>Does it work with Byfron/Hyperion?</span><div class="faq-icon"><span></span><span></span></div></div><div class="faq-answer"><p>Absolutely. Our Pro and Ultimate plans include our proprietary Hyperion bypass that remains undetected. We were the first executor to crack Hyperion and continue to lead in bypass technology.</p></div></div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="200"><div class="faq-question"><span>How do I install SELP?</span><div class="faq-icon"><span></span><span></span></div></div><div class="faq-answer"><p>Download the installer, run it, and SELP handles the rest. Temporarily disable Windows Defender (false positive due to injection techniques). Full setup takes under 60 seconds.</p></div></div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="300"><div class="faq-question"><span>What payment methods are accepted?</span><div class="faq-icon"><span></span><span></span></div></div><div class="faq-answer"><p>We accept PayPal, all major credit/debit cards, and cryptocurrency (BTC, ETH, LTC). All transactions are secured with 256-bit encryption.</p></div></div>
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="400"><div class="faq-question"><span>Can I get a refund?</span><div class="faq-icon"><span></span><span></span></div></div><div class="faq-answer"><p>Yes! We offer a 30-day money-back guarantee. If you're not completely satisfied, contact support for a full refund. No questions asked.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-glow"></div>
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <svg viewBox="0 0 120 40" class="footer-logo"><defs><linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#00f0ff"/><stop offset="100%" style="stop-color:#bf00ff"/></linearGradient></defs><text x="5" y="28" fill="url(#footerLogoGrad)" font-family="Orbitron" font-size="24" font-weight="900">SELP</text></svg>
+                    <p>The world's most advanced Roblox executor. Trusted by over 287,000 users worldwide.</p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.373-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg></a>
+                        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col"><h4>Product</h4><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#">Download</a><a href="#">Changelog</a></div>
+                    <div class="footer-col"><h4>Resources</h4><a href="#">Documentation</a><a href="#">Script Hub</a><a href="#">Tutorials</a><a href="#">API Reference</a></div>
+                    <div class="footer-col"><h4>Company</h4><a href="#">About Us</a><a href="#">Contact</a><a href="#">Careers</a><a href="#">Press Kit</a></div>
+                    <div class="footer-col"><h4>Legal</h4><a href="#">Terms of Service</a><a href="#">Privacy Policy</a><a href="#">Refund Policy</a><a href="#">DMCA</a></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 SELP Technologies Inc. All rights reserved.</p>
+                <p class="disclaimer">SELP is not affiliated with Roblox Corporation. For educational purposes only. Use at your own risk.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="selp_ultimate.js"></script>
+</body>
+</html>
